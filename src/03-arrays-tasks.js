@@ -420,8 +420,23 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  arr.sort((a, b) => {
+    if (a.country > b.country) {
+      return 1;
+    }
+    if (a.country < b.country) {
+      return -1;
+    }
+    if (a.city > b.city) {
+      return 1;
+    }
+    if (a.city < b.city) {
+      return -1;
+    }
+    return 0;
+  });
+  return arr;
 }
 
 /**
@@ -442,8 +457,17 @@ function sortCitiesArray(/* arr */) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  const template = Array.from(Array(n), () => Array(n).fill(0));
+  const result = [];
+  function check(element, index) {
+    const mas = element;
+    mas[index] = 1;
+    result.push(mas);
+    return 1;
+  }
+  template.every(check);
+  return result;
 }
 
 /**
@@ -508,8 +532,23 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  let key = keySelector.toString();
+  key = key.slice(key.indexOf('.') + 1);
+  let value = valueSelector.toString();
+  value = value.slice(value.indexOf('.') + 1);
+  const template = {};
+  function check(element) {
+    if (template[element[key]] !== undefined) {
+      template[element[key]].push(element[value]);
+    } else {
+      template[element[key]] = [element[value]];
+    }
+    return 1;
+  }
+  array.every(check);
+  const props = Object.keys(template);
+  return props.map((prop) => [prop, template[prop]]);
 }
 
 
@@ -543,8 +582,14 @@ function selectMany(arr, childrenSelector) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  let result = arr;
+  function step(index) {
+    result = result[index];
+    return 1;
+  }
+  indexes.every(step);
+  return result;
 }
 
 
